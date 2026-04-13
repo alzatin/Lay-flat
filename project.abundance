@@ -41,8 +41,7 @@
         },
         {
           "name": "Axis",
-          "ioValue": "Z",
-          "currentEquation": "X"
+          "ioValue": "Z"
         }
       ],
       "codeVersion": 1,
@@ -56,13 +55,11 @@
       "ioValues": [
         {
           "name": "x length",
-          "ioValue": 300,
-          "currentEquation": "300"
+          "ioValue": 300
         },
         {
           "name": "y length",
-          "ioValue": 100,
-          "currentEquation": "100"
+          "ioValue": 100
         }
       ]
     },
@@ -84,8 +81,8 @@
     },
     {
       "atomType": "Move",
-      "x": 0.40962671905697445,
-      "y": 0.1646341463414634,
+      "x": 0.410757946210269,
+      "y": 0.13109756097560976,
       "uniqueID": "id-2364",
       "ioValues": [
         {
@@ -102,15 +99,14 @@
         },
         {
           "name": "zDist",
-          "ioValue": 50,
-          "currentEquation": "50"
+          "ioValue": 50
         }
       ]
     },
     {
       "atomType": "Input",
       "x": 0.025384615384615384,
-      "y": 0.600609756097561,
+      "y": 0.15384615384615385,
       "uniqueID": "id-2371",
       "name": "Axis",
       "type": "array",
@@ -122,8 +118,8 @@
     },
     {
       "atomType": "Assembly",
-      "x": 0.6237721021611002,
-      "y": 0.23475609756097562,
+      "x": 0.6161369193154034,
+      "y": 0.18292682926829268,
       "uniqueID": "id-2375",
       "ioValues": [
         {
@@ -152,8 +148,7 @@
         },
         {
           "name": "yDist",
-          "ioValue": 50,
-          "currentEquation": "50"
+          "ioValue": 50
         },
         {
           "name": "zDist",
@@ -163,8 +158,8 @@
     },
     {
       "atomType": "Rotate",
-      "x": 0.5029469548133595,
-      "y": 0.3597560975609756,
+      "x": 0.5419722901385493,
+      "y": 0.35060975609756095,
       "uniqueID": "id-2386",
       "ioValues": [
         {
@@ -177,8 +172,7 @@
         },
         {
           "name": "y-axis degrees",
-          "ioValue": 30,
-          "currentEquation": "30"
+          "ioValue": 30
         },
         {
           "name": "z-axis degrees",
@@ -189,28 +183,24 @@
     {
       "atomType": "Input",
       "x": 0.025384615384615384,
-      "y": 0.6929174484052533,
+      "y": 0.24615384615384617,
       "uniqueID": "id-2392",
       "name": "Shape",
       "type": "geometry"
     },
     {
       "atomType": "Code",
-      "x": 0.7269155206286837,
-      "y": 0.34146341463414637,
+      "x": 0.7310513447432763,
+      "y": 0.35060975609756095,
       "uniqueID": "id-2395",
       "ioValues": [
         {
           "name": "geometry",
           "ioValue": "__GEOMETRY_INPUT__"
-        },
-        {
-          "name": "Axis",
-          "ioValue": "Z"
         }
       ],
       "codeVersion": 1,
-      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null },\n  { inputName: \"Axis\", type: \"string\", defaultValue: \"X\" },\n];\nlet axisAngles = [0,0,90]\nif (Axis == \"X\") {\n  axisAngles = [90,0,0]\n}\nelse if (Axis == \"Y\") {\n  axisAngles = [0,90,0]\n}\nelse if (Axis == \"Z\") {\n  axisAngles = [0,0,90]\n}\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, axisAngles[0], axisAngles[1], axisAngles[2]);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
+      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null }\n];\n\nlet importedGeometry = library[geometry];\n\n// Test multiple rotations to find the flattest orientation\nconst rotations = [\n  [0, 0, 0],\n  [90, 0, 0],\n  [0, 90, 0],\n  [0, 0, 90],\n  [45, 45, 0],\n  [90, 45, 0],\n  [0, 90, 45]\n];\n\nlet bestRotation = [0, 0, 0];\nlet minHeight = Infinity;\n\nfor (const [rotX, rotY, rotZ] of rotations) {\n  let rotated = await Rotate(importedGeometry, rotX, rotY, rotZ);\n  let bounds = await GetBounds(rotated);\n  let height = bounds.max[2] - bounds.min[2];\n  \n  if (height < minHeight) {\n    minHeight = height;\n    bestRotation = [rotX, rotY, rotZ];\n  }\n}\n\n// Apply the best rotation\nlet flatGeometry = await Rotate(importedGeometry, bestRotation[0], bestRotation[1], bestRotation[2]);\n\n// Move to XY plane\nlet bounds = await GetBounds(flatGeometry);\nlet zOffset = -bounds.min[2];\nlet flatOnXY = await Move(flatGeometry, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"autoFlattened\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
     }
   ],
   "allConnectors": [
@@ -245,16 +235,6 @@
       "ap2ID": "id-2350"
     },
     {
-      "ap2Name": "Axis",
-      "ap1ID": "id-2371",
-      "ap2ID": "id-2395"
-    },
-    {
-      "ap2Name": "geometry",
-      "ap1ID": "id-2375",
-      "ap2ID": "id-2395"
-    },
-    {
       "ap2Name": "geometry",
       "ap1ID": "id-2379",
       "ap2ID": "id-2386"
@@ -263,6 +243,11 @@
       "ap2Name": "Shape 2",
       "ap1ID": "id-2386",
       "ap2ID": "id-2375"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-2386",
+      "ap2ID": "id-2395"
     },
     {
       "ap2Name": "geometry",
