@@ -27,8 +27,8 @@
     },
     {
       "atomType": "Code",
-      "x": 0.6434184675834971,
-      "y": 0.5457317073170731,
+      "x": 0.6925343811394892,
+      "y": 0.5640243902439024,
       "uniqueID": "id-2350",
       "ioValues": [
         {
@@ -64,7 +64,7 @@
     },
     {
       "atomType": "Extrude",
-      "x": 0.2956777996070727,
+      "x": 0.30255402750491156,
       "y": 0.34146341463414637,
       "uniqueID": "id-2359",
       "ioValues": [
@@ -80,8 +80,8 @@
     },
     {
       "atomType": "Move",
-      "x": 0.47544204322200395,
-      "y": 0.36585365853658536,
+      "x": 0.40962671905697445,
+      "y": 0.1646341463414634,
       "uniqueID": "id-2364",
       "ioValues": [
         {
@@ -98,8 +98,8 @@
         },
         {
           "name": "zDist",
-          "ioValue": 5,
-          "currentEquation": "5"
+          "ioValue": 50,
+          "currentEquation": "50"
         }
       ]
     },
@@ -114,6 +114,47 @@
         "X",
         "Y",
         "Z"
+      ]
+    },
+    {
+      "atomType": "Assembly",
+      "x": 0.6149312377210217,
+      "y": 0.22560975609756098,
+      "uniqueID": "id-2375",
+      "ioValues": [
+        {
+          "name": "Shape 1",
+          "ioValue": null
+        },
+        {
+          "name": "Shape 2",
+          "ioValue": null
+        }
+      ]
+    },
+    {
+      "atomType": "Move",
+      "x": 0.42436149312377214,
+      "y": 0.39634146341463417,
+      "uniqueID": "id-2379",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "xDist",
+          "ioValue": 0
+        },
+        {
+          "name": "yDist",
+          "ioValue": 50,
+          "currentEquation": "50"
+        },
+        {
+          "name": "zDist",
+          "ioValue": 0
+        }
       ]
     }
   ],
@@ -135,13 +176,28 @@
     },
     {
       "ap2Name": "geometry",
+      "ap1ID": "id-2359",
+      "ap2ID": "id-2379"
+    },
+    {
+      "ap2Name": "Shape 1",
       "ap1ID": "id-2364",
-      "ap2ID": "id-2350"
+      "ap2ID": "id-2375"
     },
     {
       "ap2Name": "Axis",
       "ap1ID": "id-2371",
       "ap2ID": "id-2350"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-2375",
+      "ap2ID": "id-2350"
+    },
+    {
+      "ap2Name": "Shape 2",
+      "ap1ID": "id-2379",
+      "ap2ID": "id-2375"
     }
   ],
   "unitsKey": "Unitless",
