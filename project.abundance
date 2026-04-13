@@ -4,6 +4,13 @@
   "y": 0,
   "uniqueID": "id-2347",
   "name": "Lay-flat",
+  "ioValues": [
+    {
+      "name": "Axis",
+      "ioValue": "Y",
+      "currentEquation": "Y"
+    }
+  ],
   "topLevel": true,
   "allAtoms": [
     {
@@ -20,17 +27,22 @@
     },
     {
       "atomType": "Code",
-      "x": 0.706286836935167,
-      "y": 0.3871951219512195,
+      "x": 0.5913555992141454,
+      "y": 0.6371951219512195,
       "uniqueID": "id-2350",
       "ioValues": [
         {
           "name": "geometry",
           "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "Axis",
+          "ioValue": "Y",
+          "currentEquation": "X"
         }
       ],
       "codeVersion": 1,
-      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null },\n];\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, 0, 0, 90);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
+      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null },\n  { inputName: \"Axis\", type: \"string\", defaultValue: \"X\" },\n];\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, 0, 0, 90);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
     },
     {
       "atomType": "Rectangle",
@@ -90,6 +102,19 @@
           "currentEquation": "5"
         }
       ]
+    },
+    {
+      "atomType": "Input",
+      "x": 0.025384615384615384,
+      "y": 0.4054878048780488,
+      "uniqueID": "id-2371",
+      "name": "Axis",
+      "type": "array",
+      "options": [
+        "X",
+        "Y",
+        "Z"
+      ]
     }
   ],
   "allConnectors": [
@@ -106,6 +131,11 @@
     {
       "ap2Name": "geometry",
       "ap1ID": "id-2364",
+      "ap2ID": "id-2350"
+    },
+    {
+      "ap2Name": "Axis",
+      "ap1ID": "id-2371",
       "ap2ID": "id-2350"
     }
   ],
