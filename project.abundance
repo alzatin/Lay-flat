@@ -20,8 +20,8 @@
     },
     {
       "atomType": "Code",
-      "x": 0.5520628683693517,
-      "y": 0.41158536585365857,
+      "x": 0.6974459724950883,
+      "y": 0.4085365853658537,
       "uniqueID": "id-2350",
       "ioValues": [
         {
@@ -30,7 +30,7 @@
         }
       ],
       "codeVersion": 1,
-      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null }\n];\nconsole.log(geometry)\nlet importedGeometry = library[geometry];\nconsole.log(importedGeometry)\nconsole.log( await GetBounds(importedGeometry))\n// Rotate 90 degrees around X-axis to lay flat\nlet flatGeometry = await Rotate(importedGeometry, 90, 0, 0);\n\n// Get bounds and automatically move to z = 0\nlet bounds = await GetBounds(geometry);\nconsole.log(bounds)\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(flatGeometry, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnXY\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
+      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null }\n];\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, 0, 0, 90);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
     },
     {
       "atomType": "Rectangle",
@@ -53,7 +53,7 @@
     {
       "atomType": "Extrude",
       "x": 0.2956777996070727,
-      "y": 0.33536585365853655,
+      "y": 0.34146341463414637,
       "uniqueID": "id-2359",
       "ioValues": [
         {
@@ -68,8 +68,8 @@
     },
     {
       "atomType": "Move",
-      "x": 0.42829076620825146,
-      "y": 0.6189024390243902,
+      "x": 0.47544204322200395,
+      "y": 0.36585365853658536,
       "uniqueID": "id-2364",
       "ioValues": [
         {
