@@ -7,8 +7,8 @@
   "ioValues": [
     {
       "name": "Axis",
-      "ioValue": "Y",
-      "currentEquation": "Y"
+      "ioValue": "X",
+      "currentEquation": "X"
     }
   ],
   "topLevel": true,
@@ -27,8 +27,8 @@
     },
     {
       "atomType": "Code",
-      "x": 0.5913555992141454,
-      "y": 0.6371951219512195,
+      "x": 0.6434184675834971,
+      "y": 0.5457317073170731,
       "uniqueID": "id-2350",
       "ioValues": [
         {
@@ -37,17 +37,17 @@
         },
         {
           "name": "Axis",
-          "ioValue": "Y",
+          "ioValue": "X",
           "currentEquation": "X"
         }
       ],
       "codeVersion": 1,
-      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null },\n  { inputName: \"Axis\", type: \"string\", defaultValue: \"X\" },\n];\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, 0, 0, 90);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
+      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null },\n  { inputName: \"Axis\", type: \"string\", defaultValue: \"X\" },\n];\nlet axisAngles = [0,0,90]\nif (Axis == \"X\") {\n  axisAngles = [90,0,0]\n}\nelse if (Axis == \"Y\") {\n  axisAngles = [0,90,0]\n}\nelse if (Axis == \"Z\") {\n  axisAngles = [0,0,90]\n}\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, axisAngles[0], axisAngles[1], axisAngles[2]);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
     },
     {
       "atomType": "Rectangle",
-      "x": 0.14734774066797643,
-      "y": 0.5457317073170731,
+      "x": 0.12475442043222004,
+      "y": 0.39634146341463417,
       "uniqueID": "id-2355",
       "ioValues": [
         {
@@ -106,7 +106,7 @@
     {
       "atomType": "Input",
       "x": 0.025384615384615384,
-      "y": 0.4054878048780488,
+      "y": 0.600609756097561,
       "uniqueID": "id-2371",
       "name": "Axis",
       "type": "array",
@@ -118,6 +118,11 @@
     }
   ],
   "allConnectors": [
+    {
+      "ap2Name": "number or geometry",
+      "ap1ID": "id-2350",
+      "ap2ID": "id-2348"
+    },
     {
       "ap2Name": "geometry",
       "ap1ID": "id-2355",
