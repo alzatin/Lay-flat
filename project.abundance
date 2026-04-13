@@ -1,13 +1,115 @@
 {
-    "atomType": "Molecule",
-    "x": 0,
-    "y": 0,
-    "uniqueID": "id-2347",
-    "name": "Lay-flat",
-    "topLevel": true,
-    "allAtoms": [],
-    "allConnectors": [],
-    "unitsKey": "Unitless",
-    "fileTypeVersion": 1,
-    "filetypeVersion": 1
+  "atomType": "Molecule",
+  "x": 0,
+  "y": 0,
+  "uniqueID": "id-2347",
+  "name": "Lay-flat",
+  "topLevel": true,
+  "allAtoms": [
+    {
+      "atomType": "Output",
+      "x": 0.98,
+      "y": 0.5,
+      "uniqueID": "id-2348",
+      "ioValues": [
+        {
+          "name": "number or geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        }
+      ]
+    },
+    {
+      "atomType": "Code",
+      "x": 0.5520628683693517,
+      "y": 0.41158536585365857,
+      "uniqueID": "id-2350",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        }
+      ],
+      "codeVersion": 1,
+      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null }\n];\nconsole.log(geometry)\nlet importedGeometry = library[geometry];\nconsole.log(importedGeometry)\nconsole.log( await GetBounds(importedGeometry))\n// Rotate 90 degrees around X-axis to lay flat\nlet flatGeometry = await Rotate(importedGeometry, 90, 0, 0);\n\n// Get bounds and automatically move to z = 0\nlet bounds = await GetBounds(geometry);\nconsole.log(bounds)\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(flatGeometry, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnXY\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
+    },
+    {
+      "atomType": "Rectangle",
+      "x": 0.14734774066797643,
+      "y": 0.5457317073170731,
+      "uniqueID": "id-2355",
+      "ioValues": [
+        {
+          "name": "x length",
+          "ioValue": 300,
+          "currentEquation": "300"
+        },
+        {
+          "name": "y length",
+          "ioValue": 100,
+          "currentEquation": "100"
+        }
+      ]
+    },
+    {
+      "atomType": "Extrude",
+      "x": 0.2956777996070727,
+      "y": 0.33536585365853655,
+      "uniqueID": "id-2359",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "height",
+          "ioValue": 9
+        }
+      ]
+    },
+    {
+      "atomType": "Move",
+      "x": 0.42829076620825146,
+      "y": 0.6189024390243902,
+      "uniqueID": "id-2364",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "xDist",
+          "ioValue": 0
+        },
+        {
+          "name": "yDist",
+          "ioValue": 0
+        },
+        {
+          "name": "zDist",
+          "ioValue": 5,
+          "currentEquation": "5"
+        }
+      ]
+    }
+  ],
+  "allConnectors": [
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-2355",
+      "ap2ID": "id-2359"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-2359",
+      "ap2ID": "id-2364"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-2364",
+      "ap2ID": "id-2350"
+    }
+  ],
+  "unitsKey": "Unitless",
+  "fileTypeVersion": 1,
+  "filetypeVersion": 1
 }
