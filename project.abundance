@@ -20,8 +20,8 @@
     },
     {
       "atomType": "Code",
-      "x": 0.6974459724950883,
-      "y": 0.4085365853658537,
+      "x": 0.706286836935167,
+      "y": 0.3871951219512195,
       "uniqueID": "id-2350",
       "ioValues": [
         {
@@ -30,7 +30,7 @@
         }
       ],
       "codeVersion": 1,
-      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null }\n];\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, 0, 0, 90);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
+      "code": "const Inputs = [\n  { inputName: \"geometry\", type: \"geometry\", defaultValue: null },\n];\n\nlet importedGeometry = library[geometry];\n\n// Rotate 90° around Y-axis to lay the 300 × 100 face flat on XY\nlet rotated = await Rotate(importedGeometry, 0, 0, 90);\n\n// Auto-detect Z position and move to XY plane\nlet bounds = await GetBounds(rotated);\nlet zOffset = -bounds.min[2]\nlet flatOnXY = await Move(rotated, 0, 0, zOffset);\n\nlet result = {\n  geometry: [flatOnXY],\n  dimension: \"3D\",\n  tags: [\"flatOnWidestFace\"],\n  color: \"#A3CE5B\",\n  plane: new replicad.Plane(),\n  bom: []\n};\n\nreturn result;"
     },
     {
       "atomType": "Rectangle",
